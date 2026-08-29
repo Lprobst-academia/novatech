@@ -1,696 +1,667 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>NovaTech — Technology Store</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NovaTech — Smart Tech Store</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<!-- ================= HEADER ================= -->
+<header class="topbar">
+  <a class="logo" href="#home">Nova<span>Tech</span></a>
 
-<header>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#shop">Shop</a>
+    <a href="#about">About</a>
+  </nav>
 
-    <a href="#home" class="logo">
-        Nova<span>Tech</span>
-    </a>
-
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#products">Products</a>
-        <a href="#about">About</a>
-    </nav>
-
-    <div class="header-actions">
-
-        <button
-            class="wishlist-header"
-            onclick="showWishlist()"
-        >
-            ♡ <span id="wishlistCount">0</span>
-        </button>
-
-        <button
-            class="cart-button"
-            onclick="openCart()"
-        >
-            🛒 Cart
-            <span id="cartCount">0</span>
-        </button>
-
-    </div>
-
+  <div class="header-actions">
+    <button class="icon-btn" onclick="openWishlist()">♡ <span id="wishlistCount">0</span></button>
+    <button class="cart-btn" onclick="openCart()">🛒 Cart <span id="cartCount">0</span></button>
+  </div>
 </header>
-
-
-<!-- ================= MAIN ================= -->
 
 <main>
 
-    <!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-copy">
+    <div class="pill">● NEW COLLECTION 2026</div>
 
-    <section id="home" class="hero">
+    <h1>
+      Technology that<br>
+      <span>works for you.</span>
+    </h1>
 
-        <div class="hero-content">
+    <p>
+      Discover carefully selected gaming gear, PC hardware and smart
+      accessories — all in one simple store.
+    </p>
 
-            <p class="eyebrow">
-                NEXT-GEN TECHNOLOGY
-            </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#shop">Explore products →</a>
+      <button class="btn secondary" onclick="openDemo()">How it works</button>
+    </div>
 
-            <h1>
-                Technology<br>
-                <span>for everyone.</span>
-            </h1>
+    <div class="trust-row">
+      <span>✓ Secure demo checkout</span>
+      <span>✓ Free shipping over CHF 100</span>
+    </div>
+  </div>
 
-            <p class="hero-description">
-                Discover gaming gear, PC components and
-                accessories designed for your digital life.
-            </p>
+  <div class="hero-product">
+    <div class="hero-badge">BESTSELLER</div>
+    <div class="hero-emoji">🎧</div>
 
-            <div class="hero-buttons">
+    <small>Nova X1</small>
+    <h2>Wireless Headset</h2>
 
-                <a
-                    href="#products"
-                    class="primary-button"
-                >
-                    Shop now →
-                </a>
+    <div class="hero-price">CHF 129.90</div>
 
-                <a
-                    href="#about"
-                    class="secondary-button"
-                >
-                    Learn more
-                </a>
+    <button class="btn primary full" onclick="addToCart(1)">
+      Add to cart
+    </button>
+  </div>
+</section>
 
-            </div>
+<section id="shop" class="shop section">
 
-        </div>
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">NOVA STORE</div>
+      <h2>Find your next upgrade</h2>
+      <p id="resultCount" class="muted"></p>
+    </div>
 
+    <div class="search">
+      <span>⌕</span>
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search products..."
+        oninput="renderProducts()"
+      >
+    </div>
+  </div>
 
-        <div class="featured-card">
+  <div class="filters-row">
 
-            <div class="featured-glow">
-                🎧
-            </div>
+    <div class="filters">
+      <button class="filter active" onclick="setCategory('All',this)">All</button>
+      <button class="filter" onclick="setCategory('Gaming',this)">Gaming</button>
+      <button class="filter" onclick="setCategory('PC',this)">PC</button>
+      <button class="filter" onclick="setCategory('Accessories',this)">Accessories</button>
+    </div>
 
-            <div class="featured-info">
+    <select id="sortSelect" onchange="renderProducts()">
+      <option value="recommended">Recommended</option>
+      <option value="low">Price: Low → High</option>
+      <option value="high">Price: High → Low</option>
+      <option value="rating">Highest rated</option>
+      <option value="newest">Newest</option>
+    </select>
 
-                <span>
-                    FEATURED PRODUCT
-                </span>
+  </div>
 
-                <h2>
-                    Nova X1 Headset
-                </h2>
+  <div id="productsGrid" class="product-grid"></div>
 
-                <div class="featured-bottom">
+</section>
 
-                    <strong>
-                        CHF 129.90
-                    </strong>
+<section class="features section">
 
-                    <button
-                        onclick="addToCart(1)"
-                    >
-                        Add +
-                    </button>
+  <div class="feature">
+    <div class="feature-icon">🚚</div>
+    <h3>Fast delivery</h3>
+    <p>Free standard shipping on orders over CHF 100.</p>
+  </div>
 
-                </div>
+  <div class="feature">
+    <div class="feature-icon">↩</div>
+    <h3>Easy returns</h3>
+    <p>A simple demo return process customers can understand.</p>
+  </div>
 
-            </div>
+  <div class="feature">
+    <div class="feature-icon">✓</div>
+    <h3>Trusted checkout</h3>
+    <p>Clear validation and a transparent order summary.</p>
+  </div>
 
-        </div>
+  <div class="feature">
+    <div class="feature-icon">♧</div>
+    <h3>Support</h3>
+    <p>Helpful support information right when you need it.</p>
+  </div>
 
-    </section>
+</section>
 
+<section id="about" class="about section">
+  <div class="eyebrow">ABOUT THE PROJECT</div>
 
-    <!-- PRODUCTS -->
+  <h2>A complete e-commerce customer journey.</h2>
 
-    <section
-        id="products"
-        class="products-section"
-    >
+  <p>
+    NovaTech is a fictional store created for a school e-commerce project.
+    It demonstrates product discovery, filtering, wishlist, cart, shipping,
+    discount codes, payment validation and order tracking.
+  </p>
 
-        <div class="section-header">
-
-            <div>
-
-                <p class="eyebrow">
-                    OUR STORE
-                </p>
-
-                <h2>
-                    Popular products
-                </h2>
-
-            </div>
-
-            <div class="search-box">
-
-                <span>⌕</span>
-
-                <input
-                    id="searchInput"
-                    type="search"
-                    placeholder="Search products..."
-                    oninput="renderProducts()"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- FILTERS -->
-
-        <div class="shop-controls">
-
-            <div class="filters">
-
-                <button
-                    class="filter active"
-                    onclick="setCategory('All', this)"
-                >
-                    All
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="setCategory('Gaming', this)"
-                >
-                    Gaming
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="setCategory('PC', this)"
-                >
-                    PC
-                </button>
-
-                <button
-                    class="filter"
-                    onclick="setCategory('Accessories', this)"
-                >
-                    Accessories
-                </button>
-
-            </div>
-
-            <select
-                id="sortSelect"
-                onchange="renderProducts()"
-            >
-                <option value="default">
-                    Sort: Recommended
-                </option>
-
-                <option value="low">
-                    Price: Low → High
-                </option>
-
-                <option value="high">
-                    Price: High → Low
-                </option>
-
-                <option value="rating">
-                    Highest rated
-                </option>
-            </select>
-
-        </div>
-
-
-        <!-- PRODUCTS -->
-
-        <div
-            id="productsGrid"
-            class="product-grid"
-        ></div>
-
-    </section>
-
-
-    <!-- ABOUT -->
-
-    <section
-        id="about"
-        class="about"
-    >
-
-        <p class="eyebrow">
-            ABOUT NOVATECH
-        </p>
-
-        <h2>
-            A fictional e-commerce store
-            built for a school project.
-        </h2>
-
-        <p>
-            NovaTech demonstrates the customer journey
-            of a modern online store — from discovering
-            products to completing a simulated checkout.
-        </p>
-
-        <div class="demo-warning">
-            ⚠️ DEMO WEBSITE — No real payments are processed.
-        </div>
-
-    </section>
+  <div class="demo-note">
+    ⚠️ DEMO ONLY — No real payments are processed and no real card information should be entered.
+  </div>
+</section>
 
 </main>
 
+<!-- PRODUCT MODAL -->
 
-<!-- ================= CART ================= -->
+<div id="productOverlay" class="overlay hidden" onclick="closeProduct(event)">
+  <div class="modal product-modal" onclick="event.stopPropagation()">
 
-<div
-    id="cartOverlay"
-    class="overlay hidden"
-    onclick="closeCart(event)"
->
+    <button class="close" onclick="closeProduct()">×</button>
 
-    <aside
-        class="cart"
-        onclick="event.stopPropagation()"
-    >
+    <div id="productDetail"></div>
 
-        <div class="cart-header">
+  </div>
+</div>
 
-            <div>
-                <p class="eyebrow">
-                    YOUR SHOPPING BAG
-                </p>
+<!-- CART -->
 
-                <h2>
-                    Cart
-                </h2>
-            </div>
+<div id="cartOverlay" class="overlay hidden" onclick="closeCart(event)">
 
-            <button
-                class="close-button"
-                onclick="closeCart()"
-            >
-                ✕
-            </button>
+  <aside class="drawer" onclick="event.stopPropagation()">
 
-        </div>
+    <div class="drawer-head">
 
+      <div>
+        <div class="eyebrow">SHOPPING BAG</div>
+        <h2>Your cart</h2>
+      </div>
 
-        <div id="cartItems"></div>
+      <button class="close" onclick="closeCart()">×</button>
 
+    </div>
 
-        <div
-            id="cartSummary"
-            class="cart-summary"
-        >
+    <div id="cartItems"></div>
+    <div id="cartBottom"></div>
 
-            <div>
-                <span>Subtotal</span>
-                <strong id="cartSubtotal">
-                    CHF 0.00
-                </strong>
-            </div>
-
-            <div>
-                <span>Shipping</span>
-                <strong id="shipping">
-                    CHF 0.00
-                </strong>
-            </div>
-
-            <hr>
-
-            <div class="cart-total">
-
-                <span>Total</span>
-
-                <strong id="cartTotal">
-                    CHF 0.00
-                </strong>
-
-            </div>
-
-            <button
-                class="checkout-button"
-                onclick="startCheckout()"
-            >
-                Proceed to checkout →
-            </button>
-
-        </div>
-
-    </aside>
+  </aside>
 
 </div>
 
+<!-- WISHLIST -->
 
-<!-- ================= CHECKOUT ================= -->
+<div id="wishlistOverlay" class="overlay hidden" onclick="closeWishlist(event)">
 
-<div
-    id="checkoutOverlay"
-    class="overlay hidden"
->
+  <aside class="drawer" onclick="event.stopPropagation()">
 
-    <aside class="checkout">
+    <div class="drawer-head">
 
-        <div class="checkout-header">
+      <div>
+        <div class="eyebrow">SAVED ITEMS</div>
+        <h2>Wishlist</h2>
+      </div>
 
-            <div>
+      <button class="close" onclick="closeWishlist()">×</button>
 
-                <p class="eyebrow">
-                    NOVATECH CHECKOUT
-                </p>
+    </div>
 
-                <h2>
-                    Complete your order
-                </h2>
+    <div id="wishlistItems"></div>
 
-            </div>
-
-            <button
-                class="close-button"
-                onclick="closeCheckout()"
-            >
-                ✕
-            </button>
-
-        </div>
-
-
-        <!-- STEPS -->
-
-        <div class="checkout-steps">
-
-            <span
-                id="step1Indicator"
-                class="step active"
-            >
-                1
-            </span>
-
-            <div></div>
-
-            <span
-                id="step2Indicator"
-                class="step"
-            >
-                2
-            </span>
-
-            <div></div>
-
-            <span
-                id="step3Indicator"
-                class="step"
-            >
-                3
-            </span>
-
-        </div>
-
-
-        <!-- STEP 1 -->
-
-        <div
-            id="checkoutStep1"
-            class="checkout-step"
-        >
-
-            <h3>
-                Delivery information
-            </h3>
-
-            <p class="form-note">
-                This information is only simulated.
-            </p>
-
-            <label>
-                Full name
-                <input
-                    id="customerName"
-                    type="text"
-                    placeholder="Alex Example"
-                >
-            </label>
-
-            <label>
-                Email
-                <input
-                    id="customerEmail"
-                    type="email"
-                    placeholder="alex@example.com"
-                >
-            </label>
-
-            <label>
-                Address
-                <input
-                    id="customerAddress"
-                    type="text"
-                    placeholder="Example Street 12"
-                >
-            </label>
-
-            <div class="two-columns">
-
-                <label>
-                    ZIP
-                    <input
-                        id="customerZip"
-                        type="text"
-                        placeholder="8000"
-                    >
-                </label>
-
-                <label>
-                    City
-                    <input
-                        id="customerCity"
-                        type="text"
-                        placeholder="Zürich"
-                    >
-                </label>
-
-            </div>
-
-            <button
-                class="checkout-button"
-                onclick="nextCheckoutStep()"
-            >
-                Continue →
-            </button>
-
-        </div>
-
-
-        <!-- STEP 2 -->
-
-        <div
-            id="checkoutStep2"
-            class="checkout-step hidden"
-        >
-
-            <h3>
-                Payment method
-            </h3>
-
-            <p class="form-note">
-                No real payment will be taken.
-            </p>
-
-
-            <div class="payment-option selected">
-
-                <span>💳</span>
-
-                <div>
-
-                    <strong>
-                        Credit / Debit Card
-                    </strong>
-
-                    <small>
-                        Simulated payment
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <label>
-                Card number
-                <input
-                    type="text"
-                    placeholder="0000 0000 0000 0000"
-                    maxlength="19"
-                >
-            </label>
-
-
-            <div class="two-columns">
-
-                <label>
-                    Expiry
-                    <input
-                        type="text"
-                        placeholder="MM/YY"
-                    >
-                </label>
-
-                <label>
-                    CVC
-                    <input
-                        type="text"
-                        placeholder="123"
-                    >
-                </label>
-
-            </div>
-
-
-            <button
-                class="checkout-button"
-                onclick="nextCheckoutStep()"
-            >
-                Review order →
-            </button>
-
-        </div>
-
-
-        <!-- STEP 3 -->
-
-        <div
-            id="checkoutStep3"
-            class="checkout-step hidden"
-        >
-
-            <h3>
-                Review your order
-            </h3>
-
-            <div
-                id="checkoutReview"
-                class="checkout-review"
-            ></div>
-
-            <div class="review-total">
-
-                <span>
-                    Total
-                </span>
-
-                <strong id="reviewTotal">
-                    CHF 0.00
-                </strong>
-
-            </div>
-
-            <button
-                class="checkout-button"
-                onclick="placeOrder()"
-            >
-                Place demo order ✓
-            </button>
-
-        </div>
-
-
-        <!-- SUCCESS -->
-
-        <div
-            id="checkoutSuccess"
-            class="checkout-success hidden"
-        >
-
-            <div class="success-icon">
-                ✓
-            </div>
-
-            <p class="eyebrow">
-                ORDER CONFIRMED
-            </p>
-
-            <h2>
-                Thanks for your order!
-            </h2>
-
-            <p>
-                Your demo order has been successfully placed.
-            </p>
-
-            <div class="order-number">
-                Order #<span id="orderNumber"></span>
-            </div>
-
-            <button
-                class="checkout-button"
-                onclick="closeCheckout()"
-            >
-                Back to store
-            </button>
-
-        </div>
-
-    </aside>
+  </aside>
 
 </div>
 
+<!-- CHECKOUT -->
 
-<!-- ================= WISHLIST ================= -->
+<div id="checkoutOverlay" class="overlay hidden">
 
-<div
-    id="wishlistOverlay"
-    class="overlay hidden"
-    onclick="closeWishlist(event)"
->
+  <div class="checkout-modal">
 
-    <aside
-        class="wishlist-panel"
-        onclick="event.stopPropagation()"
-    >
+    <div class="drawer-head">
 
-        <div class="cart-header">
+      <div>
+        <div class="eyebrow">NOVATECH CHECKOUT</div>
+        <h2>Complete your order</h2>
+      </div>
 
-            <div>
+      <button class="close" onclick="closeCheckout()">×</button>
 
-                <p class="eyebrow">
-                    SAVED PRODUCTS
-                </p>
+    </div>
 
-                <h2>
-                    Wishlist
-                </h2>
+    <div class="steps">
+      <div class="step active" id="stepDot1">1</div>
+      <div class="step-line"></div>
+      <div class="step" id="stepDot2">2</div>
+      <div class="step-line"></div>
+      <div class="step" id="stepDot3">3</div>
+    </div>
 
-            </div>
+    <!-- STEP 1 -->
 
-            <button
-                class="close-button"
-                onclick="closeWishlist()"
+    <div id="checkout1" class="checkout-step">
+
+      <h3>Delivery details</h3>
+
+      <p class="muted">
+        Enter your delivery information.
+      </p>
+
+      <div class="form-grid">
+
+        <label>
+          Full name
+
+          <input
+            id="name"
+            type="text"
+            placeholder="Alex Example"
+            autocomplete="off"
+          >
+
+          <small class="error" id="nameError"></small>
+        </label>
+
+        <label>
+          Email
+
+          <input
+            id="email"
+            type="email"
+            placeholder="alex@example.com"
+            autocomplete="off"
+          >
+
+          <small class="error" id="emailError"></small>
+        </label>
+
+        <label class="wide">
+          Street and house number
+
+          <input
+            id="address"
+            type="text"
+            placeholder="Example Street 12"
+            autocomplete="off"
+          >
+
+          <small class="error" id="addressError"></small>
+        </label>
+
+        <label>
+          Postal code
+
+          <input
+            id="zip"
+            type="text"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="8000"
+            autocomplete="off"
+          >
+
+          <small class="error" id="zipError"></small>
+        </label>
+
+        <label>
+          City
+
+          <input
+            id="city"
+            type="text"
+            placeholder="Zürich"
+            autocomplete="off"
+          >
+
+          <small class="error" id="cityError"></small>
+        </label>
+
+      </div>
+
+      <h3 class="subheading">Shipping</h3>
+
+      <div class="shipping-options">
+
+        <label class="shipping-option">
+
+          <input
+            type="radio"
+            name="shippingMethod"
+            value="standard"
+            checked
+            onchange="updateCheckoutTotal()"
+          >
+
+          <span>
+            🚚 <b>Standard</b>
+            <small>3–5 days · FREE over CHF 100</small>
+          </span>
+
+          <strong>CHF 6.90</strong>
+
+        </label>
+
+        <label class="shipping-option">
+
+          <input
+            type="radio"
+            name="shippingMethod"
+            value="express"
+            onchange="updateCheckoutTotal()"
+          >
+
+          <span>
+            ⚡ <b>Express</b>
+            <small>1–2 days</small>
+          </span>
+
+          <strong>CHF 14.90</strong>
+
+        </label>
+
+      </div>
+
+      <button class="btn primary full" onclick="goCheckout(2)">
+        Continue to payment →
+      </button>
+
+    </div>
+
+    <!-- STEP 2 -->
+
+    <div id="checkout2" class="checkout-step hidden">
+
+      <h3>Payment</h3>
+
+      <p class="muted">
+        This is a simulated payment. Nothing is charged.
+      </p>
+
+      <div class="payment-tabs">
+
+        <button
+          class="payment-tab active"
+          onclick="selectPayment('card',this)"
+        >
+          💳 Card
+        </button>
+
+        <button
+          class="payment-tab"
+          onclick="selectPayment('wallet',this)"
+        >
+          ⚡ Demo Wallet
+        </button>
+
+      </div>
+
+      <div id="cardFields">
+
+        <label>
+          Card number
+
+          <input
+            id="card"
+            type="text"
+            inputmode="numeric"
+            maxlength="19"
+            placeholder="4242 4242 4242 4242"
+            autocomplete="off"
+          >
+
+          <small class="error" id="cardError"></small>
+        </label>
+
+        <div class="form-grid two">
+
+          <label>
+            Expiry
+
+            <input
+              id="expiry"
+              type="text"
+              inputmode="numeric"
+              maxlength="5"
+              placeholder="MM/YY"
+              autocomplete="off"
             >
-                ✕
-            </button>
+
+            <small class="error" id="expiryError"></small>
+          </label>
+
+          <label>
+            CVC
+
+            <input
+              id="cvc"
+              type="text"
+              inputmode="numeric"
+              maxlength="3"
+              placeholder="123"
+              autocomplete="off"
+            >
+
+            <small class="error" id="cvcError"></small>
+          </label>
 
         </div>
 
-        <div id="wishlistItems"></div>
+        <label>
+          Name on card
 
-    </aside>
+          <input
+            id="cardName"
+            type="text"
+            placeholder="Alex Example"
+            autocomplete="off"
+          >
+
+          <small class="error" id="cardNameError"></small>
+        </label>
+
+      </div>
+
+      <div id="walletFields" class="wallet-box hidden">
+
+        <div class="wallet-icon">⚡</div>
+
+        <b>Demo Wallet</b>
+
+        <p>
+          No real account is connected.
+          Continue to simulate wallet payment.
+        </p>
+
+      </div>
+
+      <div class="security-note">
+        🔒 Demo security: payment data is not sent anywhere.
+      </div>
+
+      <button class="btn primary full" onclick="goCheckout(3)">
+        Review order →
+      </button>
+
+      <button class="back-btn" onclick="goCheckout(1)">
+        ← Back
+      </button>
+
+    </div>
+
+    <!-- STEP 3 -->
+
+    <div id="checkout3" class="checkout-step hidden">
+
+      <h3>Review your order</h3>
+
+      <div id="reviewBox" class="review-box"></div>
+
+      <div class="summary-lines">
+
+        <div>
+          <span>Subtotal</span>
+          <b id="reviewSubtotal"></b>
+        </div>
+
+        <div>
+          <span>Shipping</span>
+          <b id="reviewShipping"></b>
+        </div>
+
+        <div id="discountRow">
+          <span>Discount</span>
+          <b id="reviewDiscount"></b>
+        </div>
+
+        <hr>
+
+        <div class="grand">
+          <span>Total</span>
+          <b id="reviewTotal"></b>
+        </div>
+
+      </div>
+
+      <button class="btn primary full" onclick="placeOrder()">
+        Place demo order ✓
+      </button>
+
+      <button class="back-btn" onclick="goCheckout(2)">
+        ← Back
+      </button>
+
+    </div>
+
+    <!-- SUCCESS -->
+
+    <div id="checkoutSuccess" class="checkout-success hidden">
+
+      <div class="success-icon">✓</div>
+
+      <div class="eyebrow">ORDER CONFIRMED</div>
+
+      <h2>
+        Thanks, <span id="successName"></span>!
+      </h2>
+
+      <p>
+        Your demo order has been placed successfully.
+      </p>
+
+      <div class="order-number">
+        Order <b id="orderNumber"></b>
+      </div>
+
+      <div class="tracking-card">
+
+        <span>📦</span>
+
+        <div>
+          <b>Preparing your order</b>
+          <small>We'll pretend it's on the way.</small>
+        </div>
+
+      </div>
+
+      <button class="btn primary full" onclick="closeCheckout();openTracking()">
+        View demo tracking
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
+<!-- TRACKING -->
 
-<!-- ================= TOAST ================= -->
+<div id="trackingOverlay" class="overlay hidden" onclick="closeTracking(event)">
+
+  <div class="modal tracking-modal" onclick="event.stopPropagation()">
+
+    <button class="close" onclick="closeTracking()">×</button>
+
+    <div class="eyebrow">DEMO ORDER TRACKING</div>
+
+    <h2>Where's my order?</h2>
+
+    <div class="tracking-number" id="trackingNumber"></div>
+
+    <div class="timeline">
+
+      <div class="timeline-item done">
+        <i>✓</i>
+        <div>
+          <b>Order confirmed</b>
+          <small>Just now</small>
+        </div>
+      </div>
+
+      <div class="timeline-item current">
+        <i>2</i>
+        <div>
+          <b>Preparing your order</b>
+          <small>Demo status</small>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <i>3</i>
+        <div>
+          <b>Shipped</b>
+          <small>Not yet</small>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <i>4</i>
+        <div>
+          <b>Delivered</b>
+          <small>Not yet</small>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- HOW IT WORKS -->
+
+<div id="demoOverlay" class="overlay hidden" onclick="closeDemo(event)">
+
+  <div class="modal" onclick="event.stopPropagation()">
+
+    <button class="close" onclick="closeDemo()">×</button>
+
+    <div class="eyebrow">HOW IT WORKS</div>
+
+    <h2>E-commerce in one demo</h2>
+
+    <div class="demo-flow">
+      <span>🔎 Discover</span>
+      <b>→</b>
+      <span>🛒 Cart</span>
+      <b>→</b>
+      <span>🚚 Delivery</span>
+      <b>→</b>
+      <span>💳 Payment</span>
+      <b>→</b>
+      <span>📦 Order</span>
+    </div>
+
+    <p class="muted">
+      The site stores your cart and wishlist in your browser.
+      Checkout and payment are simulations for the school project.
+    </p>
+
+  </div>
+
+</div>
 
 <div id="toast"></div>
-
 
 <script src="script.js"></script>
 
