@@ -3,14 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>NovaTech — Technology Store</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- ================= HEADER ================= -->
+
 <header>
-    <a href="#" class="logo">Nova<span>Tech</span></a>
+
+    <a href="#home" class="logo">
+        Nova<span>Tech</span>
+    </a>
 
     <nav>
         <a href="#home">Home</a>
@@ -18,19 +25,41 @@
         <a href="#about">About</a>
     </nav>
 
-    <button class="cart-button" onclick="openCart()">
-        🛒 Cart <span id="cartCount">0</span>
-    </button>
+    <div class="header-actions">
+
+        <button
+            class="wishlist-header"
+            onclick="showWishlist()"
+        >
+            ♡ <span id="wishlistCount">0</span>
+        </button>
+
+        <button
+            class="cart-button"
+            onclick="openCart()"
+        >
+            🛒 Cart
+            <span id="cartCount">0</span>
+        </button>
+
+    </div>
+
 </header>
 
+
+<!-- ================= MAIN ================= -->
 
 <main>
 
     <!-- HERO -->
+
     <section id="home" class="hero">
 
         <div class="hero-content">
-            <p class="eyebrow">NEXT-GEN TECHNOLOGY</p>
+
+            <p class="eyebrow">
+                NEXT-GEN TECHNOLOGY
+            </p>
 
             <h1>
                 Technology<br>
@@ -38,26 +67,61 @@
             </h1>
 
             <p class="hero-description">
-                Discover gaming gear, PC components and accessories
-                designed for your everyday digital life.
+                Discover gaming gear, PC components and
+                accessories designed for your digital life.
             </p>
 
-            <a href="#products" class="primary-button">
-                Shop now →
-            </a>
+            <div class="hero-buttons">
+
+                <a
+                    href="#products"
+                    class="primary-button"
+                >
+                    Shop now →
+                </a>
+
+                <a
+                    href="#about"
+                    class="secondary-button"
+                >
+                    Learn more
+                </a>
+
+            </div>
+
         </div>
 
 
         <div class="featured-card">
 
-            <div class="featured-image">
+            <div class="featured-glow">
                 🎧
             </div>
 
-            <div>
-                <p>FEATURED PRODUCT</p>
-                <h2>Nova X1 Headset</h2>
-                <strong>CHF 129.90</strong>
+            <div class="featured-info">
+
+                <span>
+                    FEATURED PRODUCT
+                </span>
+
+                <h2>
+                    Nova X1 Headset
+                </h2>
+
+                <div class="featured-bottom">
+
+                    <strong>
+                        CHF 129.90
+                    </strong>
+
+                    <button
+                        onclick="addToCart(1)"
+                    >
+                        Add +
+                    </button>
+
+                </div>
+
             </div>
 
         </div>
@@ -65,86 +129,137 @@
     </section>
 
 
-
     <!-- PRODUCTS -->
-    <section id="products" class="products-section">
+
+    <section
+        id="products"
+        class="products-section"
+    >
 
         <div class="section-header">
 
             <div>
-                <p class="eyebrow">OUR STORE</p>
-                <h2>Popular products</h2>
+
+                <p class="eyebrow">
+                    OUR STORE
+                </p>
+
+                <h2>
+                    Popular products
+                </h2>
+
             </div>
 
-            <input
-                id="searchInput"
-                type="search"
-                placeholder="🔎 Search products..."
-                oninput="renderProducts()"
-            >
+            <div class="search-box">
+
+                <span>⌕</span>
+
+                <input
+                    id="searchInput"
+                    type="search"
+                    placeholder="Search products..."
+                    oninput="renderProducts()"
+                >
+
+            </div>
 
         </div>
 
 
         <!-- FILTERS -->
-        <div class="filters">
 
-            <button
-                class="filter active"
-                onclick="setCategory('All', this)"
-            >
-                All
-            </button>
+        <div class="shop-controls">
 
-            <button
-                class="filter"
-                onclick="setCategory('Gaming', this)"
-            >
-                Gaming
-            </button>
+            <div class="filters">
 
-            <button
-                class="filter"
-                onclick="setCategory('PC', this)"
-            >
-                PC
-            </button>
+                <button
+                    class="filter active"
+                    onclick="setCategory('All', this)"
+                >
+                    All
+                </button>
 
-            <button
-                class="filter"
-                onclick="setCategory('Accessories', this)"
+                <button
+                    class="filter"
+                    onclick="setCategory('Gaming', this)"
+                >
+                    Gaming
+                </button>
+
+                <button
+                    class="filter"
+                    onclick="setCategory('PC', this)"
+                >
+                    PC
+                </button>
+
+                <button
+                    class="filter"
+                    onclick="setCategory('Accessories', this)"
+                >
+                    Accessories
+                </button>
+
+            </div>
+
+            <select
+                id="sortSelect"
+                onchange="renderProducts()"
             >
-                Accessories
-            </button>
+                <option value="default">
+                    Sort: Recommended
+                </option>
+
+                <option value="low">
+                    Price: Low → High
+                </option>
+
+                <option value="high">
+                    Price: High → Low
+                </option>
+
+                <option value="rating">
+                    Highest rated
+                </option>
+            </select>
 
         </div>
 
 
-        <!-- PRODUCT GRID -->
-        <div id="productsGrid" class="product-grid"></div>
+        <!-- PRODUCTS -->
+
+        <div
+            id="productsGrid"
+            class="product-grid"
+        ></div>
 
     </section>
 
 
-
     <!-- ABOUT -->
-    <section id="about" class="about">
 
-        <p class="eyebrow">ABOUT NOVATECH</p>
+    <section
+        id="about"
+        class="about"
+    >
+
+        <p class="eyebrow">
+            ABOUT NOVATECH
+        </p>
 
         <h2>
             A fictional e-commerce store
-            created for a school project.
+            built for a school project.
         </h2>
 
         <p>
-            NovaTech demonstrates how a modern online shop works,
-            including product discovery, search, filtering,
-            shopping carts and checkout.
+            NovaTech demonstrates the customer journey
+            of a modern online store — from discovering
+            products to completing a simulated checkout.
         </p>
 
         <div class="demo-warning">
-            ⚠️ DEMO WEBSITE — No real purchases or payments are processed.
+            ⚠️ DEMO WEBSITE — No real payments are processed.
         </div>
 
     </section>
@@ -152,8 +267,7 @@
 </main>
 
 
-
-<!-- SHOPPING CART -->
+<!-- ================= CART ================= -->
 
 <div
     id="cartOverlay"
@@ -168,9 +282,20 @@
 
         <div class="cart-header">
 
-            <h2>Your Cart</h2>
+            <div>
+                <p class="eyebrow">
+                    YOUR SHOPPING BAG
+                </p>
 
-            <button onclick="closeCart()">
+                <h2>
+                    Cart
+                </h2>
+            </div>
+
+            <button
+                class="close-button"
+                onclick="closeCart()"
+            >
                 ✕
             </button>
 
@@ -180,31 +305,389 @@
         <div id="cartItems"></div>
 
 
-        <div class="cart-total">
+        <div
+            id="cartSummary"
+            class="cart-summary"
+        >
 
-            <span>Total</span>
+            <div>
+                <span>Subtotal</span>
+                <strong id="cartSubtotal">
+                    CHF 0.00
+                </strong>
+            </div>
 
-            <strong id="cartTotal">
-                CHF 0.00
-            </strong>
+            <div>
+                <span>Shipping</span>
+                <strong id="shipping">
+                    CHF 0.00
+                </strong>
+            </div>
+
+            <hr>
+
+            <div class="cart-total">
+
+                <span>Total</span>
+
+                <strong id="cartTotal">
+                    CHF 0.00
+                </strong>
+
+            </div>
+
+            <button
+                class="checkout-button"
+                onclick="startCheckout()"
+            >
+                Proceed to checkout →
+            </button>
 
         </div>
-
-
-        <button
-            class="checkout-button"
-            onclick="checkout()"
-        >
-            Proceed to Checkout
-        </button>
 
     </aside>
 
 </div>
 
 
+<!-- ================= CHECKOUT ================= -->
 
-<!-- TOAST -->
+<div
+    id="checkoutOverlay"
+    class="overlay hidden"
+>
+
+    <aside class="checkout">
+
+        <div class="checkout-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    NOVATECH CHECKOUT
+                </p>
+
+                <h2>
+                    Complete your order
+                </h2>
+
+            </div>
+
+            <button
+                class="close-button"
+                onclick="closeCheckout()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <!-- STEPS -->
+
+        <div class="checkout-steps">
+
+            <span
+                id="step1Indicator"
+                class="step active"
+            >
+                1
+            </span>
+
+            <div></div>
+
+            <span
+                id="step2Indicator"
+                class="step"
+            >
+                2
+            </span>
+
+            <div></div>
+
+            <span
+                id="step3Indicator"
+                class="step"
+            >
+                3
+            </span>
+
+        </div>
+
+
+        <!-- STEP 1 -->
+
+        <div
+            id="checkoutStep1"
+            class="checkout-step"
+        >
+
+            <h3>
+                Delivery information
+            </h3>
+
+            <p class="form-note">
+                This information is only simulated.
+            </p>
+
+            <label>
+                Full name
+                <input
+                    id="customerName"
+                    type="text"
+                    placeholder="Alex Example"
+                >
+            </label>
+
+            <label>
+                Email
+                <input
+                    id="customerEmail"
+                    type="email"
+                    placeholder="alex@example.com"
+                >
+            </label>
+
+            <label>
+                Address
+                <input
+                    id="customerAddress"
+                    type="text"
+                    placeholder="Example Street 12"
+                >
+            </label>
+
+            <div class="two-columns">
+
+                <label>
+                    ZIP
+                    <input
+                        id="customerZip"
+                        type="text"
+                        placeholder="8000"
+                    >
+                </label>
+
+                <label>
+                    City
+                    <input
+                        id="customerCity"
+                        type="text"
+                        placeholder="Zürich"
+                    >
+                </label>
+
+            </div>
+
+            <button
+                class="checkout-button"
+                onclick="nextCheckoutStep()"
+            >
+                Continue →
+            </button>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div
+            id="checkoutStep2"
+            class="checkout-step hidden"
+        >
+
+            <h3>
+                Payment method
+            </h3>
+
+            <p class="form-note">
+                No real payment will be taken.
+            </p>
+
+
+            <div class="payment-option selected">
+
+                <span>💳</span>
+
+                <div>
+
+                    <strong>
+                        Credit / Debit Card
+                    </strong>
+
+                    <small>
+                        Simulated payment
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <label>
+                Card number
+                <input
+                    type="text"
+                    placeholder="0000 0000 0000 0000"
+                    maxlength="19"
+                >
+            </label>
+
+
+            <div class="two-columns">
+
+                <label>
+                    Expiry
+                    <input
+                        type="text"
+                        placeholder="MM/YY"
+                    >
+                </label>
+
+                <label>
+                    CVC
+                    <input
+                        type="text"
+                        placeholder="123"
+                    >
+                </label>
+
+            </div>
+
+
+            <button
+                class="checkout-button"
+                onclick="nextCheckoutStep()"
+            >
+                Review order →
+            </button>
+
+        </div>
+
+
+        <!-- STEP 3 -->
+
+        <div
+            id="checkoutStep3"
+            class="checkout-step hidden"
+        >
+
+            <h3>
+                Review your order
+            </h3>
+
+            <div
+                id="checkoutReview"
+                class="checkout-review"
+            ></div>
+
+            <div class="review-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong id="reviewTotal">
+                    CHF 0.00
+                </strong>
+
+            </div>
+
+            <button
+                class="checkout-button"
+                onclick="placeOrder()"
+            >
+                Place demo order ✓
+            </button>
+
+        </div>
+
+
+        <!-- SUCCESS -->
+
+        <div
+            id="checkoutSuccess"
+            class="checkout-success hidden"
+        >
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <p class="eyebrow">
+                ORDER CONFIRMED
+            </p>
+
+            <h2>
+                Thanks for your order!
+            </h2>
+
+            <p>
+                Your demo order has been successfully placed.
+            </p>
+
+            <div class="order-number">
+                Order #<span id="orderNumber"></span>
+            </div>
+
+            <button
+                class="checkout-button"
+                onclick="closeCheckout()"
+            >
+                Back to store
+            </button>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+<!-- ================= WISHLIST ================= -->
+
+<div
+    id="wishlistOverlay"
+    class="overlay hidden"
+    onclick="closeWishlist(event)"
+>
+
+    <aside
+        class="wishlist-panel"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="cart-header">
+
+            <div>
+
+                <p class="eyebrow">
+                    SAVED PRODUCTS
+                </p>
+
+                <h2>
+                    Wishlist
+                </h2>
+
+            </div>
+
+            <button
+                class="close-button"
+                onclick="closeWishlist()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div id="wishlistItems"></div>
+
+    </aside>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
 
 <div id="toast"></div>
 
