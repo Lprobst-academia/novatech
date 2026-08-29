@@ -1,6 +1,12 @@
-/* =========================
+/* =========================================
+   NOVATECH V2
+   Static e-commerce demo
+========================================= */
+
+
+/* =========================================
    PRODUCT DATABASE
-========================= */
+========================================= */
 
 const products = [
 
@@ -9,6 +15,8 @@ const products = [
         name: "Nova X1 Headset",
         category: "Accessories",
         price: 129.90,
+        rating: 4.8,
+        reviews: 124,
         icon: "🎧"
     },
 
@@ -17,6 +25,8 @@ const products = [
         name: "Nova Gaming PC",
         category: "PC",
         price: 1499.00,
+        rating: 4.9,
+        reviews: 87,
         icon: "🖥️"
     },
 
@@ -25,6 +35,8 @@ const products = [
         name: "Nova Mechanical Keyboard",
         category: "Gaming",
         price: 89.90,
+        rating: 4.7,
+        reviews: 201,
         icon: "⌨️"
     },
 
@@ -33,6 +45,8 @@ const products = [
         name: "Pro Wireless Mouse",
         category: "Gaming",
         price: 59.90,
+        rating: 4.6,
+        reviews: 176,
         icon: "🖱️"
     },
 
@@ -41,6 +55,8 @@ const products = [
         name: "27\" QHD Monitor",
         category: "PC",
         price: 299.90,
+        rating: 4.8,
+        reviews: 93,
         icon: "🖥️"
     },
 
@@ -49,6 +65,8 @@ const products = [
         name: "USB-C Dock Pro",
         category: "Accessories",
         price: 79.90,
+        rating: 4.5,
+        reviews: 61,
         icon: "🔌"
     },
 
@@ -57,6 +75,8 @@ const products = [
         name: "Nova Gaming Controller",
         category: "Gaming",
         price: 69.90,
+        rating: 4.7,
+        reviews: 142,
         icon: "🎮"
     },
 
@@ -65,26 +85,78 @@ const products = [
         name: "2TB NVMe SSD",
         category: "PC",
         price: 139.90,
+        rating: 4.9,
+        reviews: 118,
         icon: "💾"
+    },
+
+    {
+        id: 9,
+        name: "Nova Webcam 4K",
+        category: "Accessories",
+        price: 119.90,
+        rating: 4.6,
+        reviews: 72,
+        icon: "📷"
+    },
+
+    {
+        id: 10,
+        name: "RGB Gaming Desk",
+        category: "Gaming",
+        price: 249.90,
+        rating: 4.4,
+        reviews: 55,
+        icon: "🪑"
     }
 
 ];
 
 
 
-/* =========================
-   SHOP STATE
-========================= */
+/* =========================================
+   STATE
+========================================= */
 
 let selectedCategory = "All";
 
-let cart = [];
+let cart =
+    JSON.parse(
+        localStorage.getItem("novatechCart")
+    ) || [];
+
+let wishlist =
+    JSON.parse(
+        localStorage.getItem("novatechWishlist")
+    ) || [];
+
+let checkoutStep = 1;
 
 
 
-/* =========================
+/* =========================================
+   SAVE DATA
+========================================= */
+
+function saveData() {
+
+    localStorage.setItem(
+        "novatechCart",
+        JSON.stringify(cart)
+    );
+
+    localStorage.setItem(
+        "novatechWishlist",
+        JSON.stringify(wishlist)
+    );
+
+}
+
+
+
+/* =========================================
    RENDER PRODUCTS
-========================= */
+========================================= */
 
 function renderProducts() {
 
@@ -95,83 +167,182 @@ function renderProducts() {
             .toLowerCase();
 
 
-    const filteredProducts = products.filter(product => {
-
-        const matchesCategory =
-            selectedCategory === "All" ||
-            product.category === selectedCategory;
-
-
-        const matchesSearch =
-            product.name
-                .toLowerCase()
-                .includes(search);
+    const sort =
+        document
+            .getElementById("sortSelect")
+            .value;
 
 
-        return matchesCategory && matchesSearch;
+    let filtered =
+        products.filter(product => {
 
-    });
+            const categoryMatch =
+                selectedCategory === "All" ||
+                product.category === selectedCategory;
+
+
+            const searchMatch =
+                product.name
+                    .toLowerCase()
+                    .includes(search);
+
+
+            return categoryMatch && searchMatch;
+
+        });
+
+
+    /* SORT */
+
+    if (sort === "low") {
+
+        filtered.sort(
+            (a, b) => a.price - b.price
+        );
+
+    }
+
+    if (sort === "high") {
+
+        filtered.sort(
+            (a, b) => b.price - a.price
+        );
+
+    }
+
+    if (sort === "rating") {
+
+        filtered.sort(
+            (a, b) => b.rating - a.rating
+        );
+
+    }
 
 
     const grid =
-        document.getElementById("productsGrid");
+        document.getElementById(
+            "productsGrid"
+        );
 
 
-    if (filteredProducts.length === 0) {
+    if (filtered.length === 0) {
 
         grid.innerHTML = `
-            <p style="color:#999;">
-                No products found.
-            </p>
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:60px;
+                color:#858b98;
+            ">
+                <h3>No products found</h3>
+                <p>Try another search.</p>
+            </div>
         `;
 
         return;
+
     }
 
 
     grid.innerHTML =
-        filteredProducts.map(product => `
+        filtered.map(product => {
 
-            <article class="product">
+            const saved =
+                wishlist.includes(product.id);
 
-                <div class="product-image">
-                    ${product.icon}
-                </div>
 
-                <div class="product-info">
+            return `
 
-                    <span class="product-category">
-                        ${product.category}
-                    </span>
+                <article class="product">
 
-                    <h3 class="product-name">
-                        ${product.name}
-                    </h3>
+                    <div class="product-image">
 
-                    <div class="product-price">
-                        CHF ${product.price.toFixed(2)}
+                        <button
+                            class="
+                                wishlist-button
+                                ${saved ? "saved" : ""}
+                            "
+                            onclick="toggleWishlist(${product.id})"
+                            title="Add to wishlist"
+                        >
+                            ${saved ? "♥" : "♡"}
+                        </button>
+
+                        <span>
+                            ${product.icon}
+                        </span>
+
                     </div>
 
-                    <button
-                        class="add-button"
-                        onclick="addToCart(${product.id})"
-                    >
-                        Add to cart
-                    </button>
 
-                </div>
+                    <div class="product-info">
 
-            </article>
+                        <span class="product-category">
+                            ${product.category}
+                        </span>
 
-        `).join("");
+                        <h3 class="product-name">
+                            ${product.name}
+                        </h3>
+
+                        <div class="rating">
+
+                            ${stars(product.rating)}
+
+                            <span>
+                                ${product.rating}
+                                (${product.reviews})
+                            </span>
+
+                        </div>
+
+
+                        <div class="product-bottom">
+
+                            <div class="product-price">
+                                CHF ${product.price.toFixed(2)}
+                            </div>
+
+                            <button
+                                class="add-button"
+                                onclick="addToCart(${product.id})"
+                            >
+                                Add +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }).join("");
 
 }
 
 
 
-/* =========================
-   CATEGORY FILTER
-========================= */
+/* =========================================
+   STARS
+========================================= */
+
+function stars(rating) {
+
+    const full =
+        Math.round(rating);
+
+
+    return "★".repeat(full);
+
+}
+
+
+
+/* =========================================
+   CATEGORY
+========================================= */
 
 function setCategory(category, button) {
 
@@ -196,19 +367,21 @@ function setCategory(category, button) {
 
 
 
-/* =========================
-   ADD TO CART
-========================= */
+/* =========================================
+   CART
+========================================= */
 
 function addToCart(productId) {
 
-    const existingItem =
-        cart.find(item => item.id === productId);
+    const existing =
+        cart.find(
+            item => item.id === productId
+        );
 
 
-    if (existingItem) {
+    if (existing) {
 
-        existingItem.quantity++;
+        existing.quantity++;
 
     } else {
 
@@ -223,8 +396,9 @@ function addToCart(productId) {
     }
 
 
-    updateCart();
+    saveData();
 
+    updateCart();
 
     showToast("Added to cart ✓");
 
@@ -232,13 +406,56 @@ function addToCart(productId) {
 
 
 
-/* =========================
-   UPDATE CART
-========================= */
+function removeFromCart(productId) {
+
+    cart =
+        cart.filter(
+            item => item.id !== productId
+        );
+
+
+    saveData();
+
+    updateCart();
+
+}
+
+
+
+function changeQuantity(productId, amount) {
+
+    const item =
+        cart.find(
+            item => item.id === productId
+        );
+
+
+    if (!item) return;
+
+
+    item.quantity += amount;
+
+
+    if (item.quantity <= 0) {
+
+        removeFromCart(productId);
+
+        return;
+
+    }
+
+
+    saveData();
+
+    updateCart();
+
+}
+
+
 
 function updateCart() {
 
-    const cartCount =
+    const count =
         cart.reduce(
             (total, item) =>
                 total + item.quantity,
@@ -248,24 +465,43 @@ function updateCart() {
 
     document
         .getElementById("cartCount")
-        .textContent = cartCount;
+        .textContent = count;
 
 
-    const cartItems =
-        document.getElementById("cartItems");
+    const container =
+        document.getElementById(
+            "cartItems"
+        );
 
 
     if (cart.length === 0) {
 
-        cartItems.innerHTML = `
-            <p style="color:#999;">
-                Your cart is empty.
-            </p>
+        container.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:60px 10px;
+                color:#858b98;
+            ">
+                <div style="
+                    font-size:50px;
+                    margin-bottom:15px;
+                ">
+                    🛒
+                </div>
+
+                <h3>
+                    Your cart is empty
+                </h3>
+
+                <p style="margin-top:8px;">
+                    Add something you like!
+                </p>
+            </div>
         `;
 
     } else {
 
-        cartItems.innerHTML =
+        container.innerHTML =
             cart.map(item => {
 
                 const product =
@@ -282,22 +518,55 @@ function updateCart() {
                             ${product.icon}
                         </div>
 
-                        <div>
+                        <div class="cart-item-content">
 
                             <h4>
                                 ${product.name}
                             </h4>
 
-                            <small>
+                            <div class="cart-item-price">
                                 CHF ${product.price.toFixed(2)}
-                                × ${item.quantity}
-                            </small>
+                            </div>
 
-                            <br>
+
+                            <div class="quantity">
+
+                                <button
+                                    onclick="
+                                        changeQuantity(
+                                            ${product.id},
+                                            -1
+                                        )
+                                    "
+                                >
+                                    −
+                                </button>
+
+                                <span>
+                                    ${item.quantity}
+                                </span>
+
+                                <button
+                                    onclick="
+                                        changeQuantity(
+                                            ${product.id},
+                                            1
+                                        )
+                                    "
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
 
                             <button
                                 class="remove-button"
-                                onclick="removeFromCart(${product.id})"
+                                onclick="
+                                    removeFromCart(
+                                        ${product.id}
+                                    )
+                                "
                             >
                                 Remove
                             </button>
@@ -313,68 +582,79 @@ function updateCart() {
     }
 
 
-    const total =
-        cart.reduce((sum, item) => {
+    const subtotal =
+        getCartTotal();
+
+
+    const shipping =
+        subtotal === 0
+            ? 0
+            : subtotal >= 100
+                ? 0
+                : 6.90;
+
+
+    document
+        .getElementById("cartSubtotal")
+        .textContent =
+            `CHF ${subtotal.toFixed(2)}`;
+
+
+    document
+        .getElementById("shipping")
+        .textContent =
+            shipping === 0
+                ? "FREE"
+                : `CHF ${shipping.toFixed(2)}`;
+
+
+    document
+        .getElementById("cartTotal")
+        .textContent =
+            `CHF ${(subtotal + shipping).toFixed(2)}`;
+
+}
+
+
+
+function getCartTotal() {
+
+    return cart.reduce(
+        (sum, item) => {
 
             const product =
                 products.find(
                     p => p.id === item.id
                 );
 
+
             return sum +
                 product.price *
                 item.quantity;
 
-        }, 0);
-
-
-    document
-        .getElementById("cartTotal")
-        .textContent =
-            `CHF ${total.toFixed(2)}`;
+        },
+        0
+    );
 
 }
 
 
 
-/* =========================
-   REMOVE FROM CART
-========================= */
+/* =========================================
+   OPEN / CLOSE CART
+========================================= */
 
-function removeFromCart(productId) {
-
-    cart =
-        cart.filter(
-            item => item.id !== productId
-        );
-
+function openCart() {
 
     updateCart();
 
-}
-
-
-
-/* =========================
-   OPEN CART
-========================= */
-
-function openCart() {
 
     document
         .getElementById("cartOverlay")
         .classList.remove("hidden");
 
-
-    updateCart();
-
 }
 
-
-
-/* =========================
-   CLOSE CART
-========================= */
 
 function closeCart(event) {
 
@@ -393,11 +673,166 @@ function closeCart(event) {
 
 
 
-/* =========================
-   CHECKOUT
-========================= */
+/* =========================================
+   WISHLIST
+========================================= */
 
-function checkout() {
+function toggleWishlist(productId) {
+
+    if (wishlist.includes(productId)) {
+
+        wishlist =
+            wishlist.filter(
+                id => id !== productId
+            );
+
+        showToast("Removed from wishlist");
+
+    } else {
+
+        wishlist.push(productId);
+
+        showToast("Added to wishlist ♥");
+
+    }
+
+
+    saveData();
+
+    updateWishlistCount();
+
+    renderProducts();
+
+}
+
+
+
+function updateWishlistCount() {
+
+    document
+        .getElementById("wishlistCount")
+        .textContent =
+            wishlist.length;
+
+}
+
+
+
+function showWishlist() {
+
+    const overlay =
+        document.getElementById(
+            "wishlistOverlay"
+        );
+
+
+    const container =
+        document.getElementById(
+            "wishlistItems"
+        );
+
+
+    if (wishlist.length === 0) {
+
+        container.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:60px 10px;
+                color:#858b98;
+            ">
+                <div style="
+                    font-size:50px;
+                ">
+                    ♡
+                </div>
+
+                <h3>
+                    Your wishlist is empty
+                </h3>
+
+                <p style="margin-top:8px;">
+                    Save products you like here.
+                </p>
+            </div>
+        `;
+
+    } else {
+
+        container.innerHTML =
+            wishlist.map(id => {
+
+                const product =
+                    products.find(
+                        p => p.id === id
+                    );
+
+
+                return `
+
+                    <div class="wishlist-item">
+
+                        <div class="wishlist-item-icon">
+                            ${product.icon}
+                        </div>
+
+                        <div class="wishlist-item-info">
+
+                            <h4>
+                                ${product.name}
+                            </h4>
+
+                            <span>
+                                CHF ${product.price.toFixed(2)}
+                            </span>
+
+                        </div>
+
+                        <button
+                            class="wishlist-add"
+                            onclick="addToCart(${product.id})"
+                        >
+                            Add
+                        </button>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    overlay.classList.remove("hidden");
+
+}
+
+
+
+function closeWishlist(event) {
+
+    if (
+        !event ||
+        event.target.id === "wishlistOverlay"
+    ) {
+
+        document
+            .getElementById(
+                "wishlistOverlay"
+            )
+            .classList.add("hidden");
+
+    }
+
+}
+
+
+
+/* =========================================
+   CHECKOUT
+========================================= */
+
+function startCheckout() {
 
     if (cart.length === 0) {
 
@@ -408,33 +843,292 @@ function checkout() {
     }
 
 
-    alert(
-        "Demo checkout\n\n" +
-        "No real payment will be processed.\n" +
-        "This is a school-project demonstration."
-    );
-
-
-    cart = [];
-
-
-    updateCart();
-
-
     closeCart();
 
 
-    showToast(
-        "Demo order placed ✓"
+    checkoutStep = 1;
+
+
+    showCheckoutStep(1);
+
+
+    document
+        .getElementById(
+            "checkoutOverlay"
+        )
+        .classList.remove("hidden");
+
+}
+
+
+
+function closeCheckout() {
+
+    document
+        .getElementById(
+            "checkoutOverlay"
+        )
+        .classList.add("hidden");
+
+}
+
+
+
+function showCheckoutStep(step) {
+
+    checkoutStep = step;
+
+
+    document
+        .querySelectorAll(".checkout-step")
+        .forEach(element => {
+
+            element.classList.add("hidden");
+
+        });
+
+
+    document
+        .getElementById(
+            `checkoutStep${step}`
+        )
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById(
+            "checkoutSuccess"
+        )
+        .classList.add("hidden");
+
+
+    document
+        .querySelectorAll(".step")
+        .forEach((element, index) => {
+
+            element.classList.toggle(
+                "active",
+                index < step
+            );
+
+        });
+
+
+    if (step === 3) {
+
+        renderCheckoutReview();
+
+    }
+
+}
+
+
+
+/* =========================================
+   NEXT CHECKOUT STEP
+========================================= */
+
+function nextCheckoutStep() {
+
+    if (checkoutStep === 1) {
+
+        const name =
+            document
+                .getElementById(
+                    "customerName"
+                )
+                .value.trim();
+
+
+        const email =
+            document
+                .getElementById(
+                    "customerEmail"
+                )
+                .value.trim();
+
+
+        const address =
+            document
+                .getElementById(
+                    "customerAddress"
+                )
+                .value.trim();
+
+
+        if (
+            !name ||
+            !email ||
+            !address
+        ) {
+
+            showToast(
+                "Please fill in the required fields."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    if (checkoutStep === 2) {
+
+        const card =
+            document
+                .querySelector(
+                    '#checkoutStep2 input[type="text"]'
+                )
+                .value.trim();
+
+
+        if (!card) {
+
+            showToast(
+                "Enter a demo card number."
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    showCheckoutStep(
+        checkoutStep + 1
     );
 
 }
 
 
 
-/* =========================
-   TOAST MESSAGE
-========================= */
+/* =========================================
+   REVIEW
+========================================= */
+
+function renderCheckoutReview() {
+
+    const review =
+        document.getElementById(
+            "checkoutReview"
+        );
+
+
+    review.innerHTML =
+        cart.map(item => {
+
+            const product =
+                products.find(
+                    p => p.id === item.id
+                );
+
+
+            const total =
+                product.price *
+                item.quantity;
+
+
+            return `
+
+                <div class="review-item">
+
+                    <span>
+                        ${product.name}
+                        × ${item.quantity}
+                    </span>
+
+                    <strong>
+                        CHF ${total.toFixed(2)}
+                    </strong>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    const subtotal =
+        getCartTotal();
+
+
+    const shipping =
+        subtotal >= 100
+            ? 0
+            : 6.90;
+
+
+    document
+        .getElementById("reviewTotal")
+        .textContent =
+            `CHF ${(subtotal + shipping).toFixed(2)}`;
+
+}
+
+
+
+/* =========================================
+   PLACE ORDER
+========================================= */
+
+function placeOrder() {
+
+    const orderNumber =
+        Math.floor(
+            100000 +
+            Math.random() * 900000
+        );
+
+
+    document
+        .getElementById(
+            "orderNumber"
+        )
+        .textContent =
+            orderNumber;
+
+
+    document
+        .querySelectorAll(".checkout-step")
+        .forEach(element => {
+
+            element.classList.add("hidden");
+
+        });
+
+
+    document
+        .getElementById(
+            "checkoutSuccess"
+        )
+        .classList.remove("hidden");
+
+
+    document
+        .querySelectorAll(".step")
+        .forEach(step => {
+
+            step.classList.add("active");
+
+        });
+
+
+    cart = [];
+
+
+    saveData();
+
+    updateCart();
+
+}
+
+
+
+/* =========================================
+   TOAST
+========================================= */
 
 function showToast(message) {
 
@@ -458,10 +1152,12 @@ function showToast(message) {
 
 
 
-/* =========================
+/* =========================================
    INITIALIZE
-========================= */
+========================================= */
 
 renderProducts();
 
 updateCart();
+
+updateWishlistCount();
